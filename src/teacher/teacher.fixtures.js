@@ -1,6 +1,14 @@
 module.exports = {
     post:{
-        student:{
+        teacher:{
+            fulname: "Alberto Gonzales",
+            cid: "1094533533",
+            birthday: "1990-03-21",
+            phone_number: "3205654335",
+            email: "esuncorreo@domain.com",
+            address: "Calle falsa 123"
+        },
+        teacher_under18yo:{
             fulname: "Alberto Gonzales",
             cid: "1094533533",
             birthday: "1990-03-21",
@@ -33,7 +41,7 @@ module.exports = {
         }
     },
     put:{
-        student:{
+        teacher:{
             fulname: "Alberto Gonzales",
             cid: "1094533533",
             birthday: "1990-03-05",
