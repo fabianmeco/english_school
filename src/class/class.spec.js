@@ -1,6 +1,29 @@
+const roomModel= require('../room/room.model');
+const teacherModel = require('../teacher/teacher.model');
 const fixtures = require('./class.fixtures');
 
+
+
 describe('class', function(){
+    before(function(){
+        return Promise.all([
+            roomModel.removeAll(),
+            teacherModel.removeAll()
+        ])
+        .then(()=>Promise.all([
+            Promise.all(fixtures.rooms.map((room)=>roomModel.create(room))),
+            Promise.all(fixtures.teachers.map((teachers)=>teacherModel.create(teachers)))
+        ]))
+    })
+
+    after(function(){
+        return Promise.all([
+            roomModel.removeAll(),
+            teacherModel.removeAll(),
+            classModel.removeAll()
+        ])
+    })
+
     describe('[POST] /class', function(){
         it('Should create a new class', function(done){
             chai.request(app)

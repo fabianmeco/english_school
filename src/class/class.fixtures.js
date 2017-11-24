@@ -1,4 +1,6 @@
 module.exports = {
+    rooms:[{},{}],
+    teachers: [{},{}],
     post:{
         newclass:{
             room: 1,

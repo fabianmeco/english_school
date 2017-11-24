@@ -14,7 +14,12 @@ Teacher.find = function(id){
 Teacher.remove = function(id){
     return knex('teachers').where({id:id}).del();
 }
-Teacher.put = function(id, teacher_body){
+
+Teacher.removeAll = function(){
+    return Teacher.remove();
+}
+
+Teacher.update = function(id, teacher_body){
     return knex('teachers').where({id:id}).update(teacher_body).first();
 }
 
