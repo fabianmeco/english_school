@@ -15,5 +15,11 @@ module.exports = {
         wrngflds_room:{
             name: 'A-101'
         }
+    },
+    put:{
+        roomUpdate:{
+            name: 'R-101',
+            capacity: 12
+        }
     }
 }

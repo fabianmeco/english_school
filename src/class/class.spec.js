@@ -133,26 +133,8 @@ describe('class', function(){
                 done();
             });
         });
-    });
-    describe('[DELETE] /class', function(){
-        it('Should delete a class by its Id', function(done){
-            chai.request(app)
-            .delete('/class/1')
-            .end(function(err, res){
-                should.not.exist(err);
-                done();
-            });
-        });
-        it('Shouldn\'t delete a class using wrong Id', function(done){
-            chai.request(app)
-            .delete('/class/666')
-            .end(function(err, res){
-                should.exist(err);
-                done();
-            });
-        });
-    });
-    describe('[PUT] /class', function(){
+    });    
+    describe('[PUT] /class/:id', function(){
         it('Should update a class by its Id with correct fields', function(done){
             chai.request(app)
             .put('/class/1')
@@ -254,5 +236,22 @@ describe('class', function(){
         });
 
     });
-
+    describe('[DELETE] /class/:id', function(){
+        it('Should delete a class by its Id', function(done){
+            chai.request(app)
+            .delete('/class/1')
+            .end(function(err, res){
+                should.not.exist(err);
+                done();
+            });
+        });
+        it('Shouldn\'t delete a class using wrong Id', function(done){
+            chai.request(app)
+            .delete('/class/666')
+            .end(function(err, res){
+                should.exist(err);
+                done();
+            });
+        });
+    });
 });
