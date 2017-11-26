@@ -16,7 +16,7 @@ Teacher.remove = function(id){
 }
 
 Teacher.removeAll = function(){
-    return Teacher.remove();
+    return knex('teachers').del();
 }
 
 Teacher.update = function(id, teacher_body){

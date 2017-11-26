@@ -18,7 +18,7 @@ app.use('/student', student);
 
 app.use('/teacher', teacher);
 
-app.use('/classes', clss);
+app.use('/class', clss);
 
 app.use('/rooms', room)
 

@@ -14,6 +14,9 @@ Class.find = function(id){
 Class.remove = function(id){
     return knex('classes').where({id:id}).del();
 }
+Class.removeAll = function(id){
+    return knex('classes').del();
+}
 Class.put = function(id, class_body){
     return knex('classes').where({id:id}).update(class_body).first();
 }

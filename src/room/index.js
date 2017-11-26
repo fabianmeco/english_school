@@ -13,7 +13,7 @@ route.use('/id', roomController.getOneMiddleware, instanceRoute);
 
 instanceRoute.get('/', roomController.getOne);
 
-instanceRoute.delete('/', roomController.remove);
+instanceRoute.delete('/', roomController.delete);
 
 instanceRoute.put('/', roomController.put);
 

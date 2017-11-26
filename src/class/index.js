@@ -13,7 +13,7 @@ route.use('/id', classController.getOneMiddleware, instanceRoute);
 
 instanceRoute.get('/', classController.getOne);
 
-instanceRoute.delete('/', classController.remove);
+instanceRoute.delete('/', classController.delete);
 
 instanceRoute.put('/', classController.put);
 

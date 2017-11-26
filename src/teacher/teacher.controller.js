@@ -7,7 +7,7 @@ const schema = joi.object().keys({
     id: joi.number().integer().required(),
     fullname: joi.string().required(),
     cid: joi.string().required(),
-    birthday: joi.date().max(moment().subtract(18, 'years')).required(),
+    birthday: joi.date().required(),
     phone_number: joi.string().regex(/^[0-9\-\+]{10}$/).required(),
     email: joi.string().email().required(),
     address: joi.string().required()
@@ -16,7 +16,7 @@ const schema_update = joi.object().keys({
     id: joi.number().integer(),
     fullname: joi.string(),
     cid: joi.string(),
-    birthday: joi.date().max(moment().subtract(18, 'years')),
+    birthday: joi.date(),
     phone_number: joi.string().regex(/^[0-9\-\+]{10}$/),
     email: joi.string().email(),
     address: joi.string()

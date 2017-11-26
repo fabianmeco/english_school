@@ -1,6 +1,7 @@
 const roomModel= require('../room/room.model');
 const teacherModel = require('../teacher/teacher.model');
 const fixtures = require('./class.fixtures');
+const classModel = require('./class.model');
 
 
 
@@ -39,7 +40,7 @@ describe('class', function(){
         it('Should\'t create a new class w/o existent room', function(done){
             chai.request(app)
             .post('/class')
-            .send(fixtures.post.classNoRoom)
+            .send(fixtures.post.classNoExistingRoom)
             .end(function(err, res){
                 should.exist(err);
                 expect(res).to.have.status(404);

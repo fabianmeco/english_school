@@ -14,7 +14,7 @@ route.use('/id', studentController.getOneMiddleware, instanceRoute);
 
 instanceRoute.get('/', studentController.getOne);
 
-instanceRoute.delete('/', studentController.remove);
+instanceRoute.delete('/', studentController.delete);
 
 instanceRoute.put('/', studentController.put);
 
