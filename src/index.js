@@ -20,6 +20,6 @@ app.use('/teacher', teacher);
 
 app.use('/class', clss);
 
-app.use('/rooms', room)
+app.use('/room', room)
 
 module.exports = app;

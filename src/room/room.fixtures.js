@@ -1,24 +1,28 @@
 module.exports = {
     post:{
         room:{
-            name: 'A-101',
+            id: 1,
+            name: 'A101',
             capacity: 10
         },
         anotherRoom:{
-            name: 'A-102',
+            id: 2,
+            name: 'A102',
             capacity: 5
         },
         wrong_room:{
+            id: 1,
             name: 102,
             capacity: 5
         },
         wrngflds_room:{
-            name: 'A-101'
+            id: 1,
+            name: 'A101'
         }
     },
     put:{
         roomUpdate:{
-            name: 'R-101',
+            name: 'R101',
             capacity: 12
         }
     }

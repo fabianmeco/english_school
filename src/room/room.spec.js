@@ -1,6 +1,14 @@
 const fixtures = require('./room.fixtures');
+const roomModel = require('./room.model')
 
 describe('room', function(){
+    before(function(){        
+            roomModel.removeAll().then()
+    })
+
+    after(function(){
+            roomModel.removeAll().then()
+    })
     describe('[POST] /room', function(){
         it('Should create a new room', function(done){
             chai.request(app)
@@ -15,7 +23,7 @@ describe('room', function(){
         it('Should create another room', function(done){
             chai.request(app)
             .post('/room')
-            .send(fixtues.post.anotherRoom)
+            .send(fixtures.post.anotherRoom)
             .end(function(err, res){
                 should.not.exist(err);
                 res.body.should.be.an('object');
@@ -28,7 +36,7 @@ describe('room', function(){
             .send(fixtures.post.anotherRoom)
             .end(function(err, res){
                 should.exist(err);
-                expect(res).to.have.status(409);
+                expect(res).to.have.status(422);
                 done();
             })
         });
@@ -70,12 +78,12 @@ describe('room', function(){
             .get('/room')
             .end(function(err, res){
                 should.not.exist(err);
-                expect(res).should.to.be.an('array');
+                res.body.should.to.be.an('array');
                 done();
             });
         });
         it('Should get the rooms that match the query', function(done){
-            chai.request(app).get('/room?name=A-101').end(function(err, res){
+            chai.request(app).get('/room?name=A101').end(function(err, res){
                 should.not.exist(err);
                 done();
             });
@@ -87,13 +95,13 @@ describe('room', function(){
             .get('/room/1')
             .end(function(err, res){
                 should.not.exist(err);
-                expect(res).should.to.be.an('array');
+                expect(res.body).should.to.be.an('object');
                 done();
             });
         });
         it('Shouldn\'t get a room w/ wrong Id', function(done){
             chai.request(app).get('/room/666').end(function(err, res){
-                should.not.exist(err);
+                should.exist(err);
                 done();
             });
         });        
@@ -118,7 +126,7 @@ describe('room', function(){
 
         it('Should\'t update room w/ duplicated name', function(done){
             chai.request(app)
-            .put('/room/1')
+            .put('/room/2')
             .send(fixtures.post.room)
             .end(function(err,res){
                 should.exist(err);
@@ -142,6 +150,7 @@ describe('room', function(){
             .end(function(err, res){
                 should.exist(err);
                 expect(res).to.have.status(404);
+                done();
             })
         });
     });

@@ -9,7 +9,7 @@ route.post('/', roomController.create);
 
 route.get('/', roomController.get);
 
-route.use('/id', roomController.getOneMiddleware, instanceRoute);
+route.use('/:id', roomController.getOneMiddleware, instanceRoute);
 
 instanceRoute.get('/', roomController.getOne);
 
