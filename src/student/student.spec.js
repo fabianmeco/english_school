@@ -1,11 +1,29 @@
 const fixtures = require('./student.fixture');
+const studentModel = require('./student.model');
 
 describe('student', function(){
+    before(function () {
+        studentModel.removeAll().then()
+    })
+
+    after(function () {
+        studentModel.removeAll().then()
+    })
     describe('[POST] /student', function(){
         it('Should create a new student', function(done){
             chai.request(app)
             .post('/student')
             .send(fixtures.post.student)
+            .end(function(err, res){
+                should.not.exist(err);
+                res.body.should.be.an('object');
+                done();
+            })
+        });
+        it('Should create a another student :)', function(done){
+            chai.request(app)
+            .post('/student')
+            .send(fixtures.post.student2)
             .end(function(err, res){
                 should.not.exist(err);
                 res.body.should.be.an('object');
@@ -39,7 +57,6 @@ describe('student', function(){
             .end(function(err, res){
                 should.exist(err);
                 expect(res).to.have.status(422);
-                res.body.name.should.be.equal('email');
                 done();
             })
         });
@@ -61,7 +78,7 @@ describe('student', function(){
             .get('/student')
             .end(function(err, res){
                 should.not.exist(err);
-                expect(res).should.to.be.an('array');
+                res.body.should.to.be.an('array');
                 done();
             });
         });
@@ -84,7 +101,7 @@ describe('student', function(){
         });
         it('Shouldn\'t get a student w/ wrong Id', function(done){
             chai.request(app).get('/student/666').end(function(err, res){
-                should.not.exist(err);
+                should.exist(err);
                 done();
             });
         });        
@@ -110,7 +127,7 @@ describe('student', function(){
         it('Should\'t update student w/ duplicated name', function(done){
             chai.request(app)
             .put('/student/2')
-            .send(fixtures.post.student)
+            .send(fixtures.put.student2)
             .end(function(err,res){
                 should.exist(err);
                 expect(res).to.have.status(422);
@@ -133,6 +150,7 @@ describe('student', function(){
             .end(function(err, res){
                 should.exist(err);
                 expect(res).to.have.status(404);
+                done();
             })
         });
     });

@@ -1,6 +1,6 @@
 "use strict"
 
-const modelStudent = require('./student.model');
+const studentModel = require('./student.model');
 const joi = require('joi');
 
 
@@ -15,7 +15,6 @@ const schema = joi.object().keys({
 });
 
 const schema_update = joi.object().keys({
-    id: joi.number().integer(),
     fullname: joi.string(),
     cid: joi.string(),
     birthday: joi.date(),
@@ -27,21 +26,21 @@ const schema_update = joi.object().keys({
 exports.create = function (req, res) {
     joi.validate(req.body, schema, function (err, value) {
         if (err) {
-            return res.status(422).json(err.map(function (err) {
-                return {"name": err.name, "message": err.details.message};
+            return res.status(422).json(err.details.map(function (err) {
+                return {"name": err.context.key, "message": err.message};
             })
             );
         }
     });
-    modelStudent.find({ cid: req.body.cid })
+    studentModel.find({ cid: req.body.cid })
     .then(function(found){
         if(found){
             return res.status(422).send({ "name": "cid", "message": "Cid already registered" });
         }
-    }).catch(err => res.status(500).send(json([{ "name": "error", "message": err.message }])));
-    return studentModel.create(req.body)
-    .then(newStudent => res.json(newStudent))
-    .catch(err => res.status(500).send({ "name": "error", "message": err.message }));
+        return studentModel.create(req.body)
+        .then(newStudent => res.json(newStudent))
+    }).catch(err => console.log(err.message));
+    
 }
 exports.get = function(req, res){
     return studentModel.findAll(req.query)
@@ -49,7 +48,7 @@ exports.get = function(req, res){
     .catch(err => res.status(500).send({ "name": "error", "message": err.message }));
 }
 exports.getOneMiddleware = function(req, res, next){
-    studentModel.find(req.params.id).then(function (student) {
+    studentModel.find({id:req.params.id}).then(function (student) {
         if (student) {
             req.student = student;
             return next();
@@ -63,22 +62,22 @@ exports.getOne = function(req, res){
 exports.put = function(req, res){
     joi.validate(req.body, schema_update, function (err, value) {
         if (err) {
-            return res.status(422).json(err.map(function (err) {
-                return { "name": err.name, "message": err.details.message }
+            return res.status(422).json(err.details.map(function (error) {
+                return { "name": error.context.key, "message": error.message }
             }));
         }
     });
     studentModel.find({ cid: req.body.cid })
         .then(function (found) {
-            if (found) {
+            if (found&&(found.id!==req.student.id)) {
                 return res.status(422).send({ "name": "cid", "message": "Cid already registered" });
             }
+            return studentModel.put(req.student.id, req.body)
+            .then(student => res.json({"name":"updated", "message":"Student has been updated"}))
         })
-        .catch(err => res.status(500).send(json([{ "name": "error", "message": err.message }]))
+        .catch(err => res.status(500).send({ "name": "error", "message": err.message })
         );
-    return teacherModel.update(req.teacher.id, req.body)
-        .then(student => res.json({"name":"updated", "message":"Student has been updated"}))
-        .catch(err => res.status(500).send({ "name": "error", "message": err.message }));
+   
 }
 exports.delete = function(req, res){
     return studentModel.remove(req.student.id)
