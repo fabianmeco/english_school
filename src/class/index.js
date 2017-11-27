@@ -9,7 +9,7 @@ route.post('/', classController.create);
 
 route.get('/', classController.get);
 
-route.use('/id', classController.getOneMiddleware, instanceRoute);
+route.use('/:id', classController.getOneMiddleware, instanceRoute);
 
 instanceRoute.get('/', classController.getOne);
 

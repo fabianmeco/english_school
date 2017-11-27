@@ -62,7 +62,7 @@ describe('class', function(){
             .post('/class')
             .send(fixtures.post.classSameRoomAndHour)
             .end(function(err, res){
-                should.exists(err);
+                should.exist(err);
                 expect(res).to.have.status(422);
                 done();
             });
@@ -119,7 +119,7 @@ describe('class', function(){
         });
         it('Shouldn\'t create a new class with wrong schedule hours (7am-11am and 2pm-8pm)', function(done){
             chai.request(app)
-            post('/class')
+            .post('/class')
             .send(fixtures.post.classWrongHour)
             .end(function(err, res){
                 should.exist(err);
@@ -135,16 +135,15 @@ describe('class', function(){
             .end(function(err, res){
                 should.not.exist(err);
                 expect(res).to.have.status(200);
-                expect(res).to.be.an('array')
+                res.body.should.to.be.an('array')
                 done();
             });
         });
         it('Should get classes that matches a query', function(done){
             chai.request(app)
-            .get('/class?teacher=1')
+            .get('/class?teacher_id=1')
             .end(function(err, res){
                 should.not.exist(err);
-                expect(res).to.be.an('array');
                 done();
             });
         });

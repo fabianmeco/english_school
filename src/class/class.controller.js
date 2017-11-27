@@ -22,31 +22,31 @@ const schema_update = joi.object().keys({
 });
 
 exports.create = function (req, res) {
-    
+   console.log(req.body); 
    joi.validate(req.body, schema, function (err, value) {
         if (err) {
-            console.log(err.details);
-            return res.status(422).json(err.details.map(function (error) {
+            console.log(err.details.message);
+            return res.status(422).send(err.details.map(function (error) {
                return { "name": error.context.key, "message": error.message }
             }));
         }
     })
-    let date = new Date(req.body.date);
+    let date = new Date(req.body.date);   
     hapi.holidays({
         country: 'CO',
         year: date.getFullYear(),
-        month: date.getMonth(),
-        day: date.getDay()
+        month: date.getMonth()+1,
+        day: date.getDay()+1
     }, function (err, data) {
         if(err){
-            return res.status(422).send({ "name": "error", "message": "" });
+            return res.status(422).send({ "name": "error", "message": "Forbiden This is a holiday" });
         }
-        if (data.holidays.length>0) {
+       if (data.holidays.length>0) {
             console.log(data.holidays);
             return res.status(422).send({ "name": "error", "message": "Forbiden This is a holiday" });
-        }        
+        }
     });
-    console.log('aqui1');    
+      
     if (parseInt(date.getDate()) === 0) {
         console.log('aqui2');
         return res.status(422).send({ "name": "error", "message": "Classes can't be programmed on sundays" });
@@ -66,42 +66,40 @@ exports.create = function (req, res) {
 
     }
     //validate if room and teacher exist also validates if there are not classes assigned to the same room
-    console.log('aqui2');
     Promise.all([
         classModel.findAll({ date: req.body.date, room_id: req.body.room_id }),
         classModel.findAll({ date: req.body.date, teacher_id: req.body.teacher_id }),
-        teacherModel.find(req.body.teacher_id),
-        roomModel.find(req.body.room_id)
-    ]).then(function (validation) {
-        console.log(validation);
-        /*if (values[0]) {
+        teacherModel.find({id: req.body.teacher_id}),
+        roomModel.find({id: req.body.room_id})
+    ]).then(function (values) {
+        if (values[0].length>0) {
             console.log('date busy');
             return res.status(422).send({ "name": "error", "message": "This date is busy" })
         }
-        if (values[1]) {
+        if (values[1].length>0) {
             console.log('teacher busy');
             return res.status(422).send({ "name": "error", "message": "This teacher is busy" })
         }
-        if (!values[2]) {
+        if (values[2]===undefined||values[2].length===0) {
             console.log('teacher not registered');
-            return res.status(422).send({ "name": "error", "message": "This teacher is nor registered" })
+            return res.status(404).send({ "name": "error", "message": "This teacher is nor registered" })
         }
-        if (!values[3]) {
+        if (values[3]===undefined||values[3].length===0) {
             console.log('room not registered');
-            return res.status(422).send({ "name": "error", "message": "This room is not registered" })
+            return res.status(404).send({ "name": "error", "message": "This room is not registered" })
         }
         //create the class
         console.log('final');
         return classModel.create(req.body).then(clss => res.json(clss));
-        */
-    }).catch(err => res.status(500).send({ "name": "error", "message": err.message }))
+        
+    }).catch(err =>  res.status(500).send({ "name": "error", "message": err.message }));
 
 }
 
 exports.get = function (req, res) {
     return classModel.findAll(req.query)
-        .then(values => res.json(values))
-        .catch(err => res.status(500).send({ "name": "error", "message": err.message }));
+        .then(clss => res.json(clss))
+        .catch(err => console.log(err.message) );
 }
 exports.getOneMiddleware = function (req, res, next) {
     classModel.find(req.params.id).then(function (clss) {
@@ -118,8 +116,8 @@ exports.getOne = function (req, res) {
 exports.put = function (req, res) {
     joi.validate(req.body, schema_update, function (err, value) {
         if (err) {
-            return res.status(422).json(err.map(function (err) {
-                return { "name": err.name, "message": err.details.message }
+            return res.status(422).send(err.details.map(function (error) {
+                return { "name": error.context.key, "message": error.message }
             }));
         }
     })
@@ -158,24 +156,29 @@ exports.put = function (req, res) {
         teacherModel.find(req.body.teacher_id),
         roomModel.find(req.body.room_id)
     ]).then(function (values) {
-        if (values[0][0].id != req.clss.id) {
+        if (values[0].length>0) {
+            console.log('date busy');
             return res.status(422).send({ "name": "error", "message": "This date is busy" })
         }
-        if (values[1][0].id != req.clss.id) {
+        if (values[1].length>0) {
+            console.log('teacher busy');
             return res.status(422).send({ "name": "error", "message": "This teacher is busy" })
         }
-        if (!values[2]) {
-            return res.status(422).send({ "name": "error", "message": "This teacher is nor registered" })
+        if (values[2]===undefined||values[2].length===0) {
+            console.log('teacher not registered');
+            return res.status(404).send({ "name": "error", "message": "This teacher is nor registered" })
         }
-        if (!values[3]) {
-            return res.status(422).send({ "name": "error", "message": "This room is not registered" })
+        if (values[3]===undefined||values[3].length===0) {
+            console.log('room not registered');
+            return res.status(404).send({ "name": "error", "message": "This room is not registered" })
         }
         //create the class
-        classModel.update(req.clss.id, req.body).then(clss => res.json(clss));
-    }).catch(err => res.status(500).send({ "name": "error", "message": err.message }))
+       
+        return classModel.update(req.clss.id, req.body).then(clss => res.send({"name":"updated", "message":"Class has been updated"}));
+    }).catch(err => console.log(err.message))
 }
 exports.delete = function (req, res) {
-    return classModel.remove(req.teacher.id)
+    return classModel.remove(req.clss.id)
         .then(newClass => res.json({ "name": "updated", "message": "Room has been updated" }))
         .catch(err => res.status(500).send({ "name": "error", "message": err.message }));
 }

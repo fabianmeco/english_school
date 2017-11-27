@@ -42,7 +42,7 @@ module.exports = {
             teacher_id: 1,    
             room_id: 1                    
         },
-        classNoExistRoom: {
+        classNoExistingRoom: {
             id: 2,
             teacher_id: 1,
             room_id: 666,
@@ -52,7 +52,7 @@ module.exports = {
             id: 4,
             teacher_id: 2,
             room_id: 1,
-            date: "2017-12-06 10:00"
+            date: "2017-11-29 10:00"
         },
         classSameTeacherHour: {
             id: 4,
@@ -70,11 +70,11 @@ module.exports = {
             id: 4,
             teacher_id: 2,
             room_id: 2,
-            date: "2017-12-08 10:00"
+            date: "2018-07-04 10:00"
         },
         classWrongFormat: {
             id: 4,
-            teacher_id: "1",
+            teacher_id: "ae23",
             room_id: 2,
             date: "2017-12-08 10:00"
         },
@@ -91,7 +91,7 @@ module.exports = {
             id: 3,
             teacher_id: 1111234,
             room_id: 1,
-            date: "2017-11-30 6:00 AM"
+            date: "2017-11-30 10:00 AM"
         }
 
     },
