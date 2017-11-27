@@ -170,7 +170,7 @@ describe('class', function(){
         it('Should\'t update a class with unregistered existing room', function(done){
             chai.request(app)
             .put('/class/1')
-            .send(fixtures.post.classNoExistRoom)
+            .send(fixtures.post.classNoExistingRoom)
             .end(function(err, res){
                 should.exist(err);
                 expect(res).to.have.status(422);

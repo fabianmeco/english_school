@@ -4,7 +4,7 @@
   "description": "English classes manager",
   "main": "./src/index.js",
   "scripts": {
-    "test": "mocha ./src/**/*.spec.js"
+    "test": "mocha --exit  ./src/**/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
     "express": "^4.16.2",
+    "is-empty": "^1.2.0",
     "joi": "^13.0.2",
     "knex": "^0.14.1",
     "mocha": "^4.0.1",
