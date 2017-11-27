@@ -7,16 +7,15 @@ const schema = joi.object().keys({
     id: joi.number().integer().required(),
     fullname: joi.string().required(),
     cid: joi.string().required(),
-    birthday: joi.date().required(),
+    birthday: joi.date().max(moment().subtract(18, 'years').format()).required(),
     phone_number: joi.string().regex(/^[0-9\-\+]{10}$/).required(),
     email: joi.string().email().required(),
     address: joi.string().required()
 });
 const schema_update = joi.object().keys({
-    id: joi.number().integer(),
     fullname: joi.string(),
     cid: joi.string(),
-    birthday: joi.date(),
+    birthday: joi.date().max(moment().subtract(18, 'years').format()),
     phone_number: joi.string().regex(/^[0-9\-\+]{10}$/),
     email: joi.string().email(),
     address: joi.string()
@@ -24,25 +23,22 @@ const schema_update = joi.object().keys({
 
 exports.create = function (req, res) {
     joi.validate(req.body, schema, function (err, value) {
-        if (err) {
-            return res.status(422).json(err.map(function (err) {
-                return { "name": err.name, "message": err.details.message }
+        if (err) {           
+            return res.status(422).send(err.details.map(function (error) {
+                return { "name": error.context.key, "message": error.message }
             }));
         }
     });
-    teacherModel.find({ cid: req.body.cid })
+   
+    return teacherModel.find({ cid: req.body.cid })
         .then(function (found) {
             if (found) {
-                return res.status(422).send({ "name": "cid", "message": "Cid already registered" });
+               return res.status(422).send({ "name": "cid", "message": "Cid already registered" });
             }
+            return teacherModel.create(req.body)
+            .then(newTeacher => res.json(newTeacher))
         })
-        .catch(err => res.status(500)
-            .send(json([{ "name": "error", "message": err.message }]))
-        );
-    return teacherModel.create(req.body)
-        .then(newTeacher => res.json(newTeacher))
-        .catch(err => res.status(500).send({ "name": "error", "message": err.message }));
-
+        .catch(err =>res.status(500).send([{ "name": "error", "message": err.message }]));
 }
 exports.get = function(req, res){
     return teacherModel.findAll(req.query)
@@ -50,7 +46,7 @@ exports.get = function(req, res){
     .catch(err => res.status(500).send({ "name": "error", "message": err.message }));
 }
 exports.getOneMiddleware = function(req, res, next){
-    teacherModel.find(req.params.id).then(function (teacher) {
+    return teacherModel.find({id:req.params.id}).then(function (teacher) {
         if (teacher) {
             req.teacher = teacher;
             return next();
@@ -63,23 +59,21 @@ exports.getOne = function(req, res){
 }
 exports.put = function(req, res){
     joi.validate(req.body, schema_update, function (err, value) {
-        if (err) {
-            return res.status(422).json(err.map(function (err) {
-                return { "name": err.name, "message": err.details.message }
+        if (err) {            
+            return res.status(422).send(err.details.map(function (error) {
+                return { "name": error.context.key, "message": error.message }
             }));
         }
     });
-    teacherModel.find({ cid: req.body.cid })
+    return teacherModel.find({ cid: req.body.cid })
         .then(function (found) {
-            if (found) {
+            if (found&&(found.id!==req.teacher.id)) {         
                 return res.status(422).send({ "name": "cid", "message": "Cid already registered" });
             }
+            return teacherModel.update(req.teacher.id, req.body)
+            .then(newTeacher => res.send({"name":"updated", "message":"Room has been updated"}))
         })
-        .catch(err => res.status(500).send(json([{ "name": "error", "message": err.message }]))
-        );
-    return teacherModel.update(req.teacher.id, req.body)
-        .then(newTeacher => res.json({"name":"updated", "message":"Room has been updated"}))
-        .catch(err => res.status(500).send({ "name": "error", "message": err.message }));
+        .catch(err => res.status(500).send({ "name": "error", "message": err.message }));    
 }
 exports.delete = function(req, res){
     return teacherModel.remove(req.teacher.id)

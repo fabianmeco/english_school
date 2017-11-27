@@ -8,8 +8,8 @@ Teacher.create = function(teacher){
 Teacher.findAll = function(teacher_query){
     return knex.select('*').from('teachers').where(teacher_query)
 }
-Teacher.find = function(id){
-    return Teacher.findAll({id:id}).first();
+Teacher.find = function(query){
+    return Teacher.findAll(query).first();
 }
 Teacher.remove = function(id){
     return knex('teachers').where({id:id}).del();
