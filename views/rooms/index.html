@@ -37,12 +37,48 @@
 
     <div class="row justify-content-md-center">
         <div class="col-md-auto">
-                <a href="./create" class="btn btn-primary btn-lg btn-block">Create new classroom</a>
-                <button type="button" class="btn btn-primary btn-lg btn-block">List all the classrooms</button>
+            <a href="./create" class="btn btn-primary btn-lg btn-block">Create new classroom</a>
+            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="getAll()">List all the classrooms</button>
         </div>
     </div>
 
-    
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+                <ul class="list-group" id="output">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getAll() {
+            axios.get('/api/room')
+                .then(function (response) {
+                    document.getElementById('output').innerHTML = response.data.map(function (room) {
+                        return (
+                            '<li class="list-group-item d-flex justify-content-between align-items-center"> Room name: ' +
+                            room.name + '  ' +
+                            '<button type="button" class="btn btn-success btn-sm" onclick=del(' + room.id + ')>Del</button>' +
+                            '<button type="button" class="btn btn-danger btn-sm" onclick=edit(' + room.id + ')>Edit</button>' +
+                            '' +
+                            '</li><br/>'
+                        );
+                    }).join('');
+                })
+                .catch(function (err) {
+
+                });
+        }
+        function del(id) {
+            axios.delete('/api/room/' + id)
+                .then(function(){
+                    getAll();
+                })
+                .catch();
+        }
+    </script>
 
 
 

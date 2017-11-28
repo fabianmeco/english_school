@@ -12,23 +12,23 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="../">English School</a>
+        <a class="navbar-brand" href="../../">English School</a>
         <div class=" collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="../student">Students
+                    <a class="nav-link" href="../../student">Students
                     </a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="../class">Classes
+                    <a class="nav-link" href="../../class">Classes
                     </a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="../rooms">Classrooms
+                    <a class="nav-link" href="../">Classrooms
                     </a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="../teacher">Teachers
+                    <a class="nav-link" href="../../teacher">Teachers
                     </a>
                 </li>
             </ul>
@@ -44,7 +44,7 @@
     <div class="container">
         <div class="row justify-content-md-center">
             <div class="col-md-auto">
-                <form name="roomform" id="roomform">
+                <form name="roomform" id="room">
                     <div class="form-group">
                         <label for="name">Classroom Name</label>
                         <input name="name" type="text" class="form-control" id="name" placeholder="Classroom name">
@@ -62,7 +62,7 @@
         (function () {
             var output = document.getElementById('output');
             document.getElementById('post').onclick = function(){
-                var data = document.getElementById('roomform').elements;
+                var data = document.getElementById('room').elements;
                 var room = {"name":data[0].value,"capacity":parseInt(data[1].value)}
                 
                 axios.post('/api/room', room)

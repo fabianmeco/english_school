@@ -19,14 +19,15 @@ exports.create = function (req, res) {
                 roomModel.find({ name: req.body.name }),
                 roomModel.findAll({})
             ])
-               .then(function (result) {
+                .then(function (result) {
+                    if (result[1].length >= 5) {
+                        return res.status(422).send({ "name": "room", "message": "max rooms reached" });
+                    }
                     if (result[0]) {
                         console.log('room2');
                         return res.status(422).send({ "name": "name", "message": "room name already registered" })
                     }
-                    if (result[1].length >= 2) {
-                        return res.status(422).send({ "name": "room", "message": "max rooms reached" });
-                    }
+
                     return roomModel.create(req.body)
                         .then(newRoom => res.json(newRoom))
                 })
