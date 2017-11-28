@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Classrooms</title>
+    <title>Create Classrooms</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
         crossorigin="anonymous">
 </head>
@@ -24,7 +24,7 @@
                     </a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Classrooms
+                    <a class="nav-link" href="../rooms">Classrooms
                     </a>
                 </li>
                 <li class="nav-item active">
@@ -34,18 +34,50 @@
             </ul>
         </div>
     </nav>
-
-    <div class="row justify-content-md-center">
-        <div class="col-md-auto">
-                <a href="./create" class="btn btn-primary btn-lg btn-block">Create new classroom</a>
-                <button type="button" class="btn btn-primary btn-lg btn-block">List all the classrooms</button>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div id="output" class="col-md-auto">
+            </div>
         </div>
     </div>
 
-    
-
-
-
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+                <form name="roomform" id="roomform">
+                    <div class="form-group">
+                        <label for="name">Classroom Name</label>
+                        <input name="name" type="text" class="form-control" id="name" placeholder="Classroom name">
+                    </div>
+                    <div class="form-group">
+                        <label for="capacity">Room capacity</label>
+                        <input name="capacity" type="number" class="form-control" id="capacity" placeholder="">
+                    </div>
+                    <button id="post" type="button" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var output = document.getElementById('output');
+            document.getElementById('post').onclick = function(){
+                var data = document.getElementById('roomform').elements;
+                var room = {"name":data[0].value,"capacity":parseInt(data[1].value)}
+                
+                axios.post('/api/room', room)
+                .then(function(res){
+                    output.innerHTML = "Success"
+                    
+                })
+                .catch(function(err){
+                    var name = document.getElementById(err.response.data.name);
+                    name.className = "form-control is-invalid";
+                    output.innerHTML = err.response.data.message;
+                });
+            }
+        })();
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -57,5 +89,6 @@
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
+
 
 </html>
