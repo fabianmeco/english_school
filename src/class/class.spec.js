@@ -83,7 +83,7 @@ describe('class', function(){
             .send(fixtures.post.classPastSchedule)
             .end(function(err, res){
                 should.exist(err);
-                expect(res).to.have.status(422);
+                expect(res).to.have.status(500);
                 done();
             });
         });
@@ -103,7 +103,7 @@ describe('class', function(){
             .send(fixtures.post.classWrongFormat)
             .end(function(err, res){
                 should.exist(err);
-                expect(res).to.have.status(422);
+                expect(res).to.have.status(500);
                 done();
             })
         });
@@ -113,7 +113,7 @@ describe('class', function(){
             .send(fixtures.post.classWithoutRequired)
             .end(function(err, res){
                 should.exist(err);
-                expect(res).to.have.status(422);
+                expect(res).to.have.status(500);
                 done();
             });
         });
@@ -182,7 +182,7 @@ describe('class', function(){
             .put('/class/1')
             .send(fixtures.post.classSameRoomAndHour)
             .end(function(err, res){
-                should.exists(err);
+                should.exist(err);
                 expect(res).to.have.status(422);
                 done();
             });
@@ -203,7 +203,7 @@ describe('class', function(){
             .send(fixtures.post.classPastSchedule)
             .end(function(err, res){
                 should.exist(err);
-                expect(res).to.have.status(422);
+                expect(res).to.have.status(500);
                 done();
             });
         });
@@ -223,13 +223,13 @@ describe('class', function(){
             .send(fixtures.post.classWrongFormat)
             .end(function(err, res){
                 should.exist(err);
-                expect(res).to.have.status(422);
+                expect(res).to.have.status(500);
                 done();
             })
         });
         it('Shouldn\'t create a new class w/o required fields', function(done){
             chai.request(app)
-            .putt('/class/1')
+            .put('/class/1')
             .send(fixtures.post.classWithoutRequired)
             .end(function(err, res){
                 should.exist(err);
@@ -239,7 +239,7 @@ describe('class', function(){
         });
         it('Shouldn\'t update a new class with wrong schedule hours (7am-11am and 2pm-8pm)', function(done){
             chai.request(app)
-            put('/class/1')
+            .put('/class/1')
             .send(fixtures.post.classWrongHour)
             .end(function(err, res){
                 should.exist(err);
@@ -249,11 +249,11 @@ describe('class', function(){
         });
         it('Shouldn\'t update a new class ussing wrong Id', function(done){
             chai.request(app)
-            put('/class/666')
+            .put('/class/666')
             .send(fixtures.post.newclass)
             .end(function(err, res){
                 should.exist(err);
-                expect(res).to.have.status(422);
+                expect(res).to.have.status(404);
                 done();
             });
         });
