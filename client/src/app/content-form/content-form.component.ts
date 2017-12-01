@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HttpClient} from '@angular/common/http'
 
 @Component({
   selector: 'app-content-form',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContentFormComponent implements OnInit {
   teacher:teacher;
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
   }

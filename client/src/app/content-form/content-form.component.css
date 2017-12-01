@@ -1,0 +1,15 @@
+.form-control{
+    border: none;
+    border-radius: 0px;
+    box-shadow: none;
+    border-bottom: 2px #2e6da4 solid;    
+}
+.row{
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 4px;
+    padding: 30px;  
+    padding-top: 0px
+
+}
+    
