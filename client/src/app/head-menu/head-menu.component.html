@@ -1,13 +1,24 @@
 <div class="container">
-  <div class="row">
-    <div >
-      
+  <div class="row inline-block">
+    <div class="col-md-4 col-md-offset-1">
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Teachers</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+
+        </div>
+      </div>
     </div>
-    <div>
-    <button class='btn btn-primary' [hidden]='save_hidden'>Save</button>
-    <button class='btn btn-primary' [hidden]='dismss_hidden'>Dismiss</button>
-    <button class='btn btn-primary' [hidden]='del_hidden'>Delete</button>
-    <button class='btn btn-primary' [hidden]='new_hidden'>New</button>
-  </div>    
+    <div class="col-md-6 col-md-offset-1">
+      <div *ngIf="buttonState">
+        <button class='btn btn-primary' ng-show="delShow">Delete</button>
+        <button class='btn btn-primary' ng-show="newShow">New</button>
+      </div>
+      <div *ngIf="!buttonState">
+        <button class='btn btn-primary' ng-show="saveShow">Save</button>
+        <button class='btn btn-primary' ng-show="dismssShow">Dismiss</button>
+      </div>
+
+
+    </div>
   </div>
 </div>

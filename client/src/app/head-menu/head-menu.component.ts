@@ -6,11 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./head-menu.component.css']
 })
 export class HeadMenuComponent  {
-  save_hidden :boolean = true;
-  dismss_hidden:boolean = true;
-  new_hidden:boolean = false;
-  del_hidden:boolean=true;
+  buttonState:boolean;
 
-  constructor() { }
+  constructor() { 
+    this.buttonState = true;
+  }
 
 }
